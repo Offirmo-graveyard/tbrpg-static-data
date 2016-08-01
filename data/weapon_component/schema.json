@@ -8,8 +8,8 @@
       "minLength": 1,
       "maxLength": 50
     },
-    "i18n_key": {
-      "description": "i18n key for this element",
+    "i18n_radix": {
+      "description": "i18n key radix for this element",
       "type": "string",
       "minLength": 3,
       "maxLength": 60
@@ -20,8 +20,8 @@
       "default": "base"
     }
   },
-  "required": [ "id", "i18n_key", "type" ],
+  "required": [ "id", "i18n_radix", "type" ],
   "xxx": {
-    "primary_key": [ "type", "i18n_key" ]
+    "primary_key": [ "type", "i18n_radix" ]
   }
 }
