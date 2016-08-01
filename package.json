@@ -1,0 +1,24 @@
+{
+  "name": "tbrpg-data",
+  "version": "0.0.1",
+  "description": "Static data for The Boring RPG reloaded",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Offirmo/tbrpg-data.git"
+  },
+  "keywords": [
+    "json",
+    "data",
+    "game"
+  ],
+  "author": "Offirmo <offirmo.net@gmail.com>",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/Offirmo/tbrpg-data/issues"
+  },
+  "homepage": "https://github.com/Offirmo/tbrpg-data#readme"
+}
