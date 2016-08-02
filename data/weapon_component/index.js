@@ -1,1 +1,1 @@
-module.exports = require('./data_001')
+module.exports = require('./data_01.json').entries
