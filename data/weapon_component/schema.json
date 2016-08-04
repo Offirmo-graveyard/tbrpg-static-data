@@ -11,13 +11,13 @@
 		},
 		"type": {
 			"description": "type of component (base, qualifier1, qualifier2, quality)",
-			"type": "string",
+			"enum": [ "base", "qualifier1", "qualifier2", "quality" ],
 			"default": "base"
 		}
 	},
 	"required": [ "hid", "type" ],
-	"xxx": {
-		"primary_key": [ "type", "hid" ],
+	"offirmo-non-standard": {
+		"primary_key_components": [ "type", "hid" ],
 		"i18n_keys": [ "main", "extra" ]
 	}
 }
