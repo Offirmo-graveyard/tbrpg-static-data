@@ -16,8 +16,10 @@
 		}
 	},
 	"required": [ "hid", "type" ],
-	"offirmo-non-standard": {
+	"offirmo_non_standard": {
 		"primary_key_components": [ "type", "hid" ],
-		"i18n_keys": [ "main", "extra" ]
+		"extra_i18n_keys": {
+			"fr": [ "gender" ]
+		}
 	}
 }

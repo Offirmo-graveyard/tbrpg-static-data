@@ -6,11 +6,17 @@ const fs = require('@offirmo/cli-toolbox/fs/extra')
 const json = require('@offirmo/cli-toolbox/fs/json')
 const tildify = require('@offirmo/cli-toolbox/string/tildify')
 const prettify_json = require('@offirmo/cli-toolbox/string/prettify-json')
+const columnify = require('@offirmo/cli-toolbox/string/columnify')
+
+const make_primary_key_builder = require('./common').make_primary_key_builder
+const make_i18n_keys_builder = require('./common').make_i18n_keys_builder
 
 const MODELS_TOP_DIR = path.join(__dirname, '../data')
 const langs = [ 'en', 'fr' ]
 
 let models = []
+
+require('@offirmo/cli-toolbox/stdout/clear-cli')()
 
 visual_tasks.run([
 	{
@@ -39,6 +45,7 @@ visual_tasks.run([
 })
 
 
+const errors = {}
 
 function synchronize_model(model) {
 	const model_top_dir = path.join(MODELS_TOP_DIR, model)
@@ -47,7 +54,7 @@ function synchronize_model(model) {
 
 	const schema_path = path.join(model_top_dir, 'schema.json')
 
-	let schema, data, data_keys = [], bad_data_entries = []
+	let schema, entries, bad_data_entries = [], entries_by_primary_key = {}
 
 	return visual_tasks.create([
 		{
@@ -57,7 +64,6 @@ function synchronize_model(model) {
 		{
 			title: `Ensuring schema validity`,
 			task: () => {
-				console.log(schema)
 				const is_schema_valid = jsen({'$ref': 'http://json-schema.org/draft-04/schema#'})(schema)
 				if (! is_schema_valid)
 					throw new Error(`schema is invalid !`)
@@ -65,11 +71,12 @@ function synchronize_model(model) {
 		},
 		{
 			title: `Reading data`,
-			task: () => data = require(model_top_dir)
+			task: () => entries = require(model_top_dir)
 		},
 		{
 			title: `Ensuring data validity`,
 			task: () => {
+				const primary_key_builder = make_primary_key_builder(model, schema)
 				const validate = jsen(schema, {
 					greedy: true,
 					formats: {},
@@ -78,7 +85,7 @@ function synchronize_model(model) {
 				const err = new Error(`Model ${model}: provided data are invalid !`)
 				err.errors = []
 
-				data.forEach((entry, index) => {
+				entries.forEach((entry, index) => {
 					if (! _.isObject(entry)) {
 						console.error(`${model_top_dir} entry #${index} is not an object !`, entry)
 						bad_data_entries.push[entry]
@@ -90,8 +97,6 @@ function synchronize_model(model) {
 						return
 					}
 
-					data_keys.push(entry.hid)
-
 					if (! validate(entry)) {
 						err.errors.push({
 							hid: entry.hid,
@@ -99,10 +104,16 @@ function synchronize_model(model) {
 							validation_errors: _.cloneDeep(validate.errors)
 						})
 					}
+					else {
+						const primary_key = primary_key_builder(entry)
+						entries_by_primary_key[primary_key] = entry
+					}
 				})
 
 				if (err.errors.length)
 					throw err
+
+				//console.log(columnify(Object.keys(entries_by_primary_key)))
 			}
 		},
 		{
@@ -128,43 +139,56 @@ function synchronize_model(model) {
 		{
 			title: `Ensuring i18n contents`,
 			task: () => visual_tasks.create(langs.map(lang => ({
-				title: `Ensuring i18n contents for "${lang}"`,
+				title: `Ensuring i18n content for "${lang}"`,
 				task: () => {
+					const i18n_keys_builder = make_i18n_keys_builder(model, schema, lang)
 					let err
 					const lang_file_path = path.join(model_i18n_dir, lang + '.json')
 					return json.read(lang_file_path)
-						.catch(err => {
-							if (_.s.startsWith(err.message, 'No data, empty input'))
-								return {}
-							throw err
-						})
-						.then(i18n_data => {
-						console.log(lang, i18n_data)
+					.catch(err => {
+						if (_.s.startsWith(err.message, 'No data, empty input'))
+							return {}
+						throw err
+					})
+					.then(i18n_data => {
 						i18n_data.lang = lang
-						const i18n_keys = []
+
+						const i18n_keys_found = []
 						_.forEach(i18n_data, (value, key) => {
 							if (! _.isString(value)) console.error(`i18n for lang ${lang} for key ${key} value is not a string !`)
 							if (key === 'lang') return
 							if (key[0] === '_') return
-							i18n_keys.push(key)
+							i18n_keys_found.push(key)
 						})
+						//console.log(`i18n_keys_found for lang ${lang}\n` + columnify(i18n_keys_found))
+
+						const i18n_keys_expected = _.flattenDeep(_.values(entries_by_primary_key).map(i18n_keys_builder))
+						//console.log(`i18n_keys_expected for lang ${lang}\n` + columnify(i18n_keys_expected))
 
 						// check if i18n matches with data
-						const mismatched_keys = _.xor(data_keys, i18n_keys);
-						mismatched_keys.forEach(key => {
-							if (data_keys.includes(key)) {
-								console.error(`Model data entry "${key}" has no i18n for ${lang} !`)
+						const mismatched_keys = _.xor(i18n_keys_expected, i18n_keys_found);
+						const extraneous_i18n_keys = []
+						mismatched_keys.forEach(i18n_key => {
+							if (i18n_keys_expected.includes(i18n_key)) {
 								// add a filler i18n entry
+								i18n_data[i18n_key] = `[TOTRANSLATE:${i18n_key}]`
 							}
-							else {
-								console.error(`Model data i18n references an unknown data "${key}" !`)
-							}
+							else
+								extraneous_i18n_keys.push(i18n_key)
 						})
+
+						const untranslated_i18n_keys = _.values(i18n_data).filter(s => _.isString(s) && _.s.startsWith(s, '[TOTRANSLATE'))
+						if (untranslated_i18n_keys.length)
+							console.error(`Model "${model}" i18n for lang "${lang}" has untranslated entries !\n` + columnify(untranslated_i18n_keys))
+						if (extraneous_i18n_keys.length)
+							console.error(`Model "${model}" i18n for lang "${lang}" references unknown data:\n` + columnify(extraneous_i18n_keys))
+
 
 						json.write(lang_file_path, i18n_data, { sortKeys: true })
 						return err
 					})
 				}
+
 			})), {concurrent: true})
 		},
 	])
