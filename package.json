@@ -20,5 +20,8 @@
   "bugs": {
     "url": "https://github.com/Offirmo/tbrpg-data/issues"
   },
-  "homepage": "https://github.com/Offirmo/tbrpg-data#readme"
+  "homepage": "https://github.com/Offirmo/tbrpg-data#readme",
+  "devDependencies": {
+    "@offirmo/cli-toolbox": "0.0.2"
+  }
 }

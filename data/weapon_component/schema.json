@@ -1,27 +1,23 @@
 {
-  "title": "Weapon Component Schema",
-  "type": "object",
-  "additionalProperties": false,
-  "properties": {
-    "id": {
-      "type": "string",
-      "minLength": 1,
-      "maxLength": 50
-    },
-    "i18n_radix": {
-      "description": "i18n key radix for this element",
-      "type": "string",
-      "minLength": 3,
-      "maxLength": 60
-    },
-    "type": {
-      "description": "type of component (base, qualifier1, qualifier2, quality)",
-      "type": "string",
-      "default": "base"
-    }
-  },
-  "required": [ "id", "i18n_radix", "type" ],
-  "xxx": {
-    "primary_key": [ "type", "i18n_radix" ]
-  }
+	"title": "Weapon Component Schema",
+	"type": "object",
+	"additionalProperties": false,
+	"properties": {
+		"hid": {
+			"description": "Human id for this element",
+			"type": "string",
+			"minLength": 3,
+			"maxLength": 50
+		},
+		"type": {
+			"description": "type of component (base, qualifier1, qualifier2, quality)",
+			"type": "string",
+			"default": "base"
+		}
+	},
+	"required": [ "hid", "type" ],
+	"xxx": {
+		"primary_key": [ "type", "hid" ],
+		"i18n_keys": [ "main", "extra" ]
+	}
 }
