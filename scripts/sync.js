@@ -11,68 +11,69 @@ const columnify = require('@offirmo/cli-toolbox/string/columnify')
 const make_primary_key_builder = require('./common').make_primary_key_builder
 const make_i18n_keys_builder = require('./common').make_i18n_keys_builder
 
-const MODELS_TOP_DIR = path.join(__dirname, '../data')
-const langs = [ 'en', 'fr' ]
+const CONST = require('./const')
 
-let models = []
+let MODELS = []
 
 require('@offirmo/cli-toolbox/stdout/clear-cli')()
 
-visual_tasks.run([
-	{
-		title: 'Gathering list of models',
-		task: () => {
-			models = fs.lsDirs(MODELS_TOP_DIR)
-		}
-	},
-	{
-		title: 'Synchronizing models',
-		task: () => {
-			return visual_tasks.create(models.map(model => ({
+module.exports = function(options = {}) {
+	return visual_tasks.run([
+		////////////
+		{
+			title: 'Gathering list of models',
+			task: () => MODELS = fs.lsDirs(CONST.models_top_dir)
+		},
+		////////////
+		{
+			title: 'Synchronizing models',
+			task: () => visual_tasks.create(MODELS.map(model => ({
 				title: `Synchronizing "${model}"`,
 				skip: () => (model[0] === '_') ? 'experimental model, not ready yet.' : undefined,
-				task: synchronize_model.bind(undefined, model)
+				task: synchronize_model.bind(undefined, model, options)
 			})), {concurrent: true})
+		},
+		////////////
+		{
+			title: 'All done',
+			task: () => {}
 		}
-	},
-	{
-		title: 'All done',
-		task: () => {}
-	}
-])
-.catch(err => {
-	console.error(prettify_json(err))
-})
+		////////////
+	])
+	.catch(err => {
+		console.error(prettify_json(err))
+	})
+}
 
 
-const errors = {}
-
-function synchronize_model(model) {
-	const model_top_dir = path.join(MODELS_TOP_DIR, model)
-	const model_i18n_dir = path.join(model_top_dir, 'i18n')
-	const model_migrations_dir = path.join(model_top_dir, 'migrations')
+function synchronize_model(model, options) {
+	const model_top_dir = path.join(CONST.models_top_dir, model)
+	const model_i18n_dir = path.join(model_top_dir, CONST.i18n_subdir)
+	const model_migrations_dir = path.join(model_top_dir, CONST.migrations_subdir)
 
 	const schema_path = path.join(model_top_dir, 'schema.json')
 
 	let schema, entries, bad_data_entries = [], entries_by_primary_key = {}
 
 	return visual_tasks.create([
+		////////////
 		{
 			title: `Reading schema ${tildify(schema_path)}`,
 			task: () => json.read(schema_path).then(s => schema = s)
 		},
+		////////////
 		{
 			title: `Ensuring schema validity`,
-			task: () => {
-				const is_schema_valid = jsen({'$ref': 'http://json-schema.org/draft-04/schema#'})(schema)
-				if (! is_schema_valid)
-					throw new Error(`schema is invalid !`)
-			}
+			task: () => Promise
+				.resolve(jsen({'$ref': 'http://json-schema.org/draft-04/schema#'})(schema))
+				.then(is_schema_valid => { if (! is_schema_valid) throw new Error(`schema is invalid !`) })
 		},
+		////////////
 		{
 			title: `Reading data`,
 			task: () => entries = require(model_top_dir)
 		},
+		////////////
 		{
 			title: `Ensuring data validity`,
 			task: () => {
@@ -87,19 +88,20 @@ function synchronize_model(model) {
 
 				entries.forEach((entry, index) => {
 					if (! _.isObject(entry)) {
-						console.error(`${model_top_dir} entry #${index} is not an object !`, entry)
-						bad_data_entries.push[entry]
-						return
+						return err.errors.push({
+							bad_data: entry,
+							validation_errors: `${model_top_dir} entry #${index} is not an object !`
+						})
 					}
 					if (!entry.hid) {
-						console.error(`${model_top_dir} entry #${index} is missing its hid !`, entry)
-						bad_data_entries.push[entry]
-						return
+						return err.errors.push({
+							bad_data: entry,
+							validation_errors: `${model_top_dir} entry #${index} is missing its hid !`
+						})
 					}
 
 					if (! validate(entry)) {
 						err.errors.push({
-							hid: entry.hid,
 							bad_data: entry,
 							validation_errors: _.cloneDeep(validate.errors)
 						})
@@ -112,33 +114,36 @@ function synchronize_model(model) {
 
 				if (err.errors.length)
 					throw err
-
-				//console.log(columnify(Object.keys(entries_by_primary_key)))
 			}
 		},
+		////////////
 		{
 			title: `sorting data`,
 			skip: () => 'not implemented',
 			task: () => { /* TODO */ }
 		},
+		////////////
 		{
 			title: `Ensuring migrations dir ${tildify(model_migrations_dir)}`,
 			task: () => fs.ensureDirSync(model_migrations_dir)
 		},
+		////////////
 		{
 			title: `Ensuring i18n dir`,
 			task: () => fs.ensureDirSync(model_i18n_dir)
 		},
+		////////////
 		{
 			title: `Ensuring i18n files`,
-			task: () => langs.map(lang => {
+			task: () => CONST.langs.map(lang => {
 				const lang_file_path = path.join(model_i18n_dir, lang + '.json')
 				return fs.ensureFileSync(lang_file_path)
 			})
 		},
+		////////////
 		{
 			title: `Ensuring i18n contents`,
-			task: () => visual_tasks.create(langs.map(lang => ({
+			task: () => visual_tasks.create(CONST.langs.map(lang => ({
 				title: `Ensuring i18n content for "${lang}"`,
 				task: () => {
 					const i18n_keys_builder = make_i18n_keys_builder(model, schema, lang)
@@ -162,16 +167,21 @@ function synchronize_model(model) {
 						})
 						//console.log(`i18n_keys_found for lang ${lang}\n` + columnify(i18n_keys_found))
 
-						const i18n_keys_expected = _.flattenDeep(_.values(entries_by_primary_key).map(i18n_keys_builder))
+						const i18n_keys_expected = _.flattenDeep(_.values(entries_by_primary_key).map(i18n_keys_builder).map(o => o.mandatory))
+						const i18n_keys_optional = _.flattenDeep(_.values(entries_by_primary_key).map(i18n_keys_builder).map(o => o.optional))
 						//console.log(`i18n_keys_expected for lang ${lang}\n` + columnify(i18n_keys_expected))
+						//console.log(`i18n_keys_optional for lang ${lang}\n` + columnify(i18n_keys_optional))
 
 						// check if i18n matches with data
 						const mismatched_keys = _.xor(i18n_keys_expected, i18n_keys_found);
 						const extraneous_i18n_keys = []
 						mismatched_keys.forEach(i18n_key => {
 							if (i18n_keys_expected.includes(i18n_key)) {
-								// add a filler i18n entry
+								// mandatory, add a filler i18n entry
 								i18n_data[i18n_key] = `[TOTRANSLATE:${i18n_key}]`
+							}
+							else if (i18n_keys_optional.includes(i18n_key)) {
+								// don't care, optional
 							}
 							else
 								extraneous_i18n_keys.push(i18n_key)
@@ -183,8 +193,7 @@ function synchronize_model(model) {
 						if (extraneous_i18n_keys.length)
 							console.error(`Model "${model}" i18n for lang "${lang}" references unknown data:\n` + columnify(extraneous_i18n_keys))
 
-
-						json.write(lang_file_path, i18n_data, { sortKeys: true })
+						if (!options.dry_run) json.write(lang_file_path, i18n_data, { sortKeys: true })
 						return err
 					})
 				}
@@ -192,5 +201,4 @@ function synchronize_model(model) {
 			})), {concurrent: true})
 		},
 	])
-
 }

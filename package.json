@@ -4,7 +4,8 @@
   "description": "Static data for The Boring RPG reloaded",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npm run sync -- --dry-run",
+    "sync": "./scripts/index.js --sync --dry-run"
   },
   "repository": {
     "type": "git",
