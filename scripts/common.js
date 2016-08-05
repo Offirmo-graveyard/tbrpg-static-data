@@ -12,9 +12,19 @@ function make_primary_key_builder(model_name, schema) {
 
 function make_i18n_keys_builder(model_name, schema, lang) {
 	const primary_key_builder = make_primary_key_builder(model_name, schema)
-	const i18n_keys = schema.offirmo_non_standard.i18n_keys[lang] || []
 
-	return data => i18n_keys.map(key => primary_key_builder(data) + KEY_SEPARATOR + key)
+	const mandatory_i18n_keys =
+		(schema.offirmo_non_standard.i18n_keys_mandatory['*'] || [])
+		.concat((schema.offirmo_non_standard.i18n_keys_mandatory[lang]|| []))
+
+	const optional_i18n_keys =
+		(schema.offirmo_non_standard.i18n_keys_optional['*'] || [])
+			.concat((schema.offirmo_non_standard.i18n_keys_optional[lang]|| []))
+
+	return data => ({
+		mandatory: mandatory_i18n_keys.map(key => primary_key_builder(data) + KEY_SEPARATOR + key),
+		optional: optional_i18n_keys.map(key => primary_key_builder(data) + KEY_SEPARATOR + key),
+	})
 }
 
 module.exports = {
