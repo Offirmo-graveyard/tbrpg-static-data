@@ -18,6 +18,7 @@ let MODELS = []
 require('@offirmo/cli-toolbox/stdout/clear-cli')()
 
 module.exports = function(options = {}) {
+	console.log(options)
 	return visual_tasks.run([
 		////////////
 		{
@@ -143,6 +144,7 @@ function synchronize_model(model, options) {
 		////////////
 		{
 			title: `Ensuring i18n contents`,
+			skip: () => options.i18n ? undefined : 'Skipped at user demand',
 			task: () => visual_tasks.create(CONST.langs.map(lang => ({
 				title: `Ensuring i18n content for "${lang}"`,
 				task: () => {
@@ -193,7 +195,7 @@ function synchronize_model(model, options) {
 						if (extraneous_i18n_keys.length)
 							console.error(`Model "${model}" i18n for lang "${lang}" references unknown data:\n` + columnify(extraneous_i18n_keys))
 
-						if (!options.dry_run) json.write(lang_file_path, i18n_data, { sortKeys: true })
+						if (!options.dryRun) json.write(lang_file_path, i18n_data, { sortKeys: true })
 						return err
 					})
 				}

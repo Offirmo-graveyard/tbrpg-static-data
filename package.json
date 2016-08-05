@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "npm run sync -- --dry-run",
-    "sync": "./scripts/index.js --sync --dry-run"
+    "sync": "./scripts/index.js --sync --no-i18n"
   },
   "repository": {
     "type": "git",

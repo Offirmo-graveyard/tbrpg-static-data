@@ -1,3 +1,3 @@
-const set_001 = require('./data_01.json').entries
+const set = require('./data.json').entries
 
-module.exports = set_001
+module.exports = set

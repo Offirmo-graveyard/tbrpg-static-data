@@ -18,8 +18,6 @@ const cli = meow(`
 
 
 if (cli.flags.sync)
-	return sync({
-		dry_run: cli.flags.dryRun
-	})
+	return sync(Object.assign({}, { i18n: true}, cli.flags))
 
 cli.showHelp(1)
