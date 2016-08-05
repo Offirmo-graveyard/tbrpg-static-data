@@ -12,7 +12,7 @@ function make_primary_key_builder(model_name, schema) {
 
 function make_i18n_keys_builder(model_name, schema, lang) {
 	const primary_key_builder = make_primary_key_builder(model_name, schema)
-	const i18n_keys = [ 'main' ].concat(schema.offirmo_non_standard.extra_i18n_keys[lang] || [])
+	const i18n_keys = schema.offirmo_non_standard.i18n_keys[lang] || []
 
 	return data => i18n_keys.map(key => primary_key_builder(data) + KEY_SEPARATOR + key)
 }

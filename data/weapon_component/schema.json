@@ -18,8 +18,9 @@
 	"required": [ "hid", "type" ],
 	"offirmo_non_standard": {
 		"primary_key_components": [ "type", "hid" ],
-		"extra_i18n_keys": {
-			"fr": [ "gender" ]
+		"i18n_keys": {
+			"en": [ "main" ],
+			"fr": [ "main", "gender" ]
 		}
 	}
 }
