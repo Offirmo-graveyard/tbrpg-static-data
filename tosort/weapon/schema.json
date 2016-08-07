@@ -97,7 +97,7 @@
 		"base_strength",
 		"enhancement_level"
 	],
-	"offirmo_non_standard": {
+	"offirmo_extensions": {
 		"primary_key_components": [ "type", "base.hid", "qualifier1.hid", "qualifier2.hid", "quality.hid" ]
 	}
 }

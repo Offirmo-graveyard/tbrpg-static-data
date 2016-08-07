@@ -1,15 +1,15 @@
 {
-  "name": "tbrpg-data",
+  "name": "tbrpg-static-data",
   "version": "0.0.1",
   "description": "Static data for The Boring RPG reloaded",
   "main": "index.js",
   "scripts": {
     "test": "npm run sync -- --dry-run",
-    "sync": "./scripts/index.js --sync --no-i18n"
+    "sync": "./scripts/index.js --sync"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Offirmo/tbrpg-data.git"
+    "url": "git+https://github.com/Offirmo/tbrpg-static-data.git"
   },
   "keywords": [
     "json",
@@ -19,9 +19,9 @@
   "author": "Offirmo <offirmo.net@gmail.com>",
   "license": "UNLICENSED",
   "bugs": {
-    "url": "https://github.com/Offirmo/tbrpg-data/issues"
+    "url": "https://github.com/Offirmo/tbrpg-static-data/issues"
   },
-  "homepage": "https://github.com/Offirmo/tbrpg-data#readme",
+  "homepage": "https://github.com/Offirmo/tbrpg-static-data#readme",
   "devDependencies": {
     "@offirmo/cli-toolbox": "0.0.2",
     "jsen": "^0.6.1"
