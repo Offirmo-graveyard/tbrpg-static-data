@@ -34,7 +34,6 @@
 	"weapon_component|base,sword|main": "épée",
 	"weapon_component|base,wand|gender": "female",
 	"weapon_component|base,wand|main": "baguette",
-
 	"weapon_component|qualifier1,admirable|main": "admirable",
 	"weapon_component|qualifier1,arcanic|main": "arcanique",
 	"weapon_component|qualifier1,bestial|main": "{gender, select, male {bestial} other {bestiale}}",
@@ -89,7 +88,6 @@
 	"weapon_component|qualifier1,used|main": "{gender, select, male {usé} other {usée}}",
 	"weapon_component|qualifier1,whirling|main": "{gender, select, male {tournoyant} other {tournoyante}}",
 	"weapon_component|qualifier1,wooden|main": "en bois",
-
 	"weapon_component|qualifier2,adjudicator|main": "de juge",
 	"weapon_component|qualifier2,ambassador|main": "d’ambassadeur",
 	"weapon_component|qualifier2,ancients|main": "des Anciens",
@@ -136,8 +134,6 @@
 	"weapon_component|qualifier2,warrior|main": "de guerrier",
 	"weapon_component|qualifier2,wise|main": "de sage",
 	"weapon_component|qualifier2,woodsman|main": "de forestier",
-
-
 	"weapon_component|quality,artifact|main": "artefact",
 	"weapon_component|quality,common|main": "commune",
 	"weapon_component|quality,epic|main": "épique",

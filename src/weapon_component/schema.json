@@ -18,8 +18,8 @@
 	"required": [ "hid", "type" ],
 	"offirmo_extensions": {
 		"hid": "weapon_component",
-		"static": true,
-		"primary_key_components": [ "type", "hid" ],
+		"is_static": true,
+		"human_unique_key_components": [ "type", "hid" ],
 		"i18n_keys_mandatory": {
 			"*": [ "main" ]
 		},

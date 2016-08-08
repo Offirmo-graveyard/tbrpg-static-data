@@ -18,7 +18,7 @@ let MODELS = []
 require('@offirmo/cli-toolbox/stdout/clear-cli')()
 
 module.exports = function(options = {}) {
-	console.log(options)
+	console.log('* sync options:', options)
 	return visual_tasks.run([
 		////////////
 		{
