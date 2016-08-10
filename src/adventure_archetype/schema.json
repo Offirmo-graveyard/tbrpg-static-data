@@ -3,12 +3,12 @@
 	"type": "object",
 	"additionalProperties": false,
 	"properties": {
-		"id": {
+		"hid": {
 			"type": "string",
 			"minLength": 1,
 			"maxLength": 50
 		},
-		"msg_id": {
+		"i18n_radix": {
 			"description": "i18n msg id for this element",
 			"type": "string",
 			"minLength": 3,
@@ -124,5 +124,15 @@
 			}
 		}
 	},
-	"required": [ "id", "msg_id", "pre", "post" ]
+	"required": [ "id", "msg_id", "pre", "post" ],
+	"offirmo_extensions": {
+		"hid": "adventure_archetype",
+		"is_static": true,
+		"human_unique_key_components": [ "hid" ],
+		"i18n_keys_mandatory": {
+			"*": [ "confrontation", "resolution" ]
+		},
+		"i18n_keys_optional": {
+		}
+	}
 }

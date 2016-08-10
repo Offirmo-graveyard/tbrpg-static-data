@@ -2,11 +2,11 @@
 const KEY_SEPARATOR = '|'
 
 function make_primary_key_builder(model_name, schema) {
-	const primary_key_components = schema.offirmo_extensions.primary_key_components
+	const human_unique_key_components = schema.offirmo_extensions.human_unique_key_components
 
 	return data => [
 		model_name,
-		primary_key_components.map(key => data[key]).join(',')
+		human_unique_key_components.map(key => data[key]).join(',')
 	].join(KEY_SEPARATOR)
 }
 
