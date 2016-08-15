@@ -1,6 +1,6 @@
 {
 	"entries": [
-		{ "hid": "bored_log", "post": { "gains": { "strength": 1 }}},
-		{ "hid": "caravan", "post": { "gains": { "coins": "small" }}}
+		{ "hid": "bored_log", "good": true, "post": { "gains": { "strength": 1 }}},
+		{ "hid": "caravan", "good": true, "post": { "gains": { "coins": "small" }}}
 	]
 }

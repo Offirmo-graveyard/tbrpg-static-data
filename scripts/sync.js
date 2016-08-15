@@ -195,7 +195,10 @@ function synchronize_model(model, options) {
 						if (extraneous_i18n_keys.length)
 							console.error(`Model "${model}" i18n for lang "${lang}" references unknown data:\n` + columnify(extraneous_i18n_keys))
 
-						if (!options.dryRun) json.write(lang_file_path, i18n_data, { sortKeys: true })
+						if (!options.dryRun) {
+							console.log('writing')
+							json.write(lang_file_path, i18n_data, { sortKeys: true })
+						}
 						return err
 					})
 				}

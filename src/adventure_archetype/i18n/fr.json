@@ -1,7 +1,7 @@
 {
-	"adventure_archetype|bored_log|confrontation": "[TOTRANSLATE:adventure_archetype|bored_log|confrontation]",
-	"adventure_archetype|bored_log|resolution": "[TOTRANSLATE:adventure_archetype|bored_log|resolution]",
-	"adventure_archetype|caravan|confrontation": "[TOTRANSLATE:adventure_archetype|caravan|confrontation]",
-	"adventure_archetype|caravan|resolution": "[TOTRANSLATE:adventure_archetype|caravan|resolution]",
+	"adventure_archetype|true,bored_log|confrontation": "Vous vous ennuyez à tel point que vous bourrez un arbre des coups de poing pendant des heures…",
+	"adventure_archetype|true,bored_log|resolution": "Vous gagnez +{strength, number} en force !",
+	"adventure_archetype|true,caravan|confrontation": "Vous avez été recruté pour escorter une caravane de marchands.",
+	"adventure_archetype|true,caravan|resolution": "Vous gagnez {coins, number} écus !",
 	"lang": "fr"
 }

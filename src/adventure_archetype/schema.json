@@ -5,8 +5,14 @@
 	"properties": {
 		"hid": {
 			"description": "Human id for this element",
+			"type": "string",
 			"minLength": 1,
 			"maxLength": 50
+		},
+		"good": {
+			"description": "wether this adventure is the result of a good or bad click",
+			"type": "boolean",
+			"default": true
 		},
 		"pre": {
 			"description": "TODO preconditions on this adventure",
@@ -116,11 +122,11 @@
 			}
 		}
 	},
-	"required": [ "hid" ],
+	"required": [ "hid", "good" ],
 	"offirmo_extensions": {
 		"hid": "adventure_archetype",
 		"is_static": true,
-		"human_unique_key_components": [ "hid" ],
+		"human_unique_key_components": [ "good", "hid" ],
 		"i18n_keys_mandatory": {
 			"*": [ "confrontation", "resolution" ]
 		},
