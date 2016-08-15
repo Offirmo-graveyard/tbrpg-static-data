@@ -4,15 +4,9 @@
 	"additionalProperties": false,
 	"properties": {
 		"hid": {
-			"type": "string",
+			"description": "Human id for this element",
 			"minLength": 1,
 			"maxLength": 50
-		},
-		"i18n_radix": {
-			"description": "i18n msg id for this element",
-			"type": "string",
-			"minLength": 3,
-			"maxLength": 60
 		},
 		"pre": {
 			"description": "TODO preconditions on this adventure",
@@ -38,9 +32,8 @@
 					"properties": {
 						"level": {
 							"description": "player's level gain through this adventure",
-							"type": "integer",
-							"minimum": 0,
-							"default": 0
+							"type": "boolean",
+							"default": false
 						},
 						"health": {
 							"description": "player's health gain through this adventure",
@@ -86,9 +79,8 @@
 						},
 						"coins": {
 							"description": "player's gold gain through this adventure",
-							"type": "integer",
-							"minimum": 0,
-							"default": 0
+							"enum": [ "none", "small", "medium", "big", "huge" ],
+							"default": "none"
 						},
 						"tokens": {
 							"description": "player's token gain through this adventure",
@@ -124,7 +116,7 @@
 			}
 		}
 	},
-	"required": [ "id", "msg_id", "pre", "post" ],
+	"required": [ "hid" ],
 	"offirmo_extensions": {
 		"hid": "adventure_archetype",
 		"is_static": true,
