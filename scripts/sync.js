@@ -7,6 +7,9 @@ const json = require('@offirmo/cli-toolbox/fs/json')
 const tildify = require('@offirmo/cli-toolbox/string/tildify')
 const prettify_json = require('@offirmo/cli-toolbox/string/prettify-json')
 const columnify = require('@offirmo/cli-toolbox/string/columnify')
+const stylize_string = require('@offirmo/cli-toolbox/string/stylize')
+const log_symbols = require('@offirmo/cli-toolbox/string/log-symbols')
+
 
 const make_primary_key_builder = require('./common').make_primary_key_builder
 const make_i18n_keys_builder = require('./common').make_i18n_keys_builder
@@ -42,7 +45,7 @@ module.exports = function(options = {}) {
 		////////////
 	])
 	.catch(err => {
-		console.error(prettify_json(err))
+		console.error(stylize_string.red.bold(log_symbols.error + prettify_json(err)))
 	})
 }
 
@@ -162,7 +165,7 @@ function synchronize_model(model, options) {
 
 						const i18n_keys_found = []
 						_.forEach(i18n_data, (value, key) => {
-							if (! _.isString(value)) console.error(`i18n for lang ${lang} for key ${key} value is not a string !`)
+							if (! _.isString(value)) console.error(stylize_string.red.bold(log_symbols.error + ` i18n for lang ${lang} for key ${key} value is not a string !`))
 							if (key === 'lang') return
 							if (key[0] === '_') return
 							i18n_keys_found.push(key)
@@ -191,12 +194,12 @@ function synchronize_model(model, options) {
 
 						const untranslated_i18n_keys = _.values(i18n_data).filter(s => _.isString(s) && _.s.startsWith(s, '[TOTRANSLATE'))
 						if (untranslated_i18n_keys.length)
-							console.error(`Model "${model}" i18n for lang "${lang}" has untranslated entries !\n` + columnify(untranslated_i18n_keys))
+							console.error(stylize_string.yellow.bold(log_symbols.warning + ` Model "${model}" i18n for lang "${lang}" has untranslated entries !\n`) + columnify(untranslated_i18n_keys))
 						if (extraneous_i18n_keys.length)
-							console.error(`Model "${model}" i18n for lang "${lang}" references unknown data:\n` + columnify(extraneous_i18n_keys))
+							console.error(stylize_string.yellow.bold(log_symbols.warning + ` Model "${model}" i18n for lang "${lang}" references unknown data:\n`) + columnify(extraneous_i18n_keys))
 
 						if (!options.dryRun) {
-							console.log('writing')
+							//console.log('writing')
 							json.write(lang_file_path, i18n_data, { sortKeys: true })
 						}
 						return err

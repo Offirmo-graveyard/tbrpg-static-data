@@ -1,0 +1,9 @@
+{
+	"item_quality|artifact|main": "artifact",
+	"item_quality|common|main": "common",
+	"item_quality|epic|main": "epic",
+	"item_quality|legendary|main": "legendary",
+	"item_quality|rare|main": "rare",
+	"item_quality|uncommon|main": "uncommon",
+	"lang": "en"
+}

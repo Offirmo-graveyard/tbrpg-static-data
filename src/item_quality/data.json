@@ -1,0 +1,10 @@
+{
+	"entries": [
+		{ "hid": "common" },
+		{ "hid": "uncommon" },
+		{ "hid": "rare" },
+		{ "hid": "epic" },
+		{ "hid": "legendary" },
+		{ "hid": "artifact" }
+	]
+}

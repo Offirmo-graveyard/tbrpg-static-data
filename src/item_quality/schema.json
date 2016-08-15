@@ -1,0 +1,23 @@
+{
+	"title": "Item Quality Schema",
+	"type": "object",
+	"additionalProperties": false,
+	"properties": {
+		"hid": {
+			"description": "Human id for this element",
+			"enum": [ "common", "uncommon", "rare", "epic", "legendary", "artifact" ],
+			"default": "common"
+		}
+	},
+	"required": [ "hid" ],
+	"offirmo_extensions": {
+		"hid": "item_quality",
+		"is_static": true,
+		"human_unique_key_components": [ "hid" ],
+		"i18n_keys_mandatory": {
+			"*": [ "main" ]
+		},
+		"i18n_keys_optional": {
+		}
+	}
+}

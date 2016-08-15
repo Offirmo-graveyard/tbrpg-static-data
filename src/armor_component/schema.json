@@ -1,0 +1,30 @@
+{
+	"title": "Armor Component Schema",
+	"type": "object",
+	"additionalProperties": false,
+	"properties": {
+		"hid": {
+			"description": "Human id for this element",
+			"type": "string",
+			"minLength": 3,
+			"maxLength": 50
+		},
+		"type": {
+			"description": "type of component (base, qualifier1, qualifier2)",
+			"enum": [ "base", "qualifier1", "qualifier2" ],
+			"default": "base"
+		}
+	},
+	"required": [ "hid", "type" ],
+	"offirmo_extensions": {
+		"hid": "armor_component",
+		"is_static": true,
+		"human_unique_key_components": [ "type", "hid" ],
+		"i18n_keys_mandatory": {
+			"*": [ "main" ]
+		},
+		"i18n_keys_optional": {
+			"fr": [ "gender", "number" ]
+		}
+	}
+}
