@@ -1,5 +1,6 @@
 {
 	"entries": [
+		{ "hid": "bad_default", "good": false, "post": {}},
 		{ "hid": "bored_log", "good": true, "post": { "gains": { "strength": 1 }}},
 		{ "hid": "caravan", "good": true, "post": { "gains": { "coins": "small" }}}
 	]
