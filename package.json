@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/Offirmo/tbrpg-static-data#readme",
   "devDependencies": {
-    "@offirmo/cli-toolbox": "^0.0.4",
-    "jsen": "^0.6.1"
+    "@offirmo/cli-toolbox": "^0.3.0",
+    "jsen": "^0.6.4"
   }
 }
