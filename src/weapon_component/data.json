@@ -17,6 +17,7 @@
 		{ "type": "base", "hid": "staff" },
 		{ "type": "base", "hid": "sword" },
 		{ "type": "base", "hid": "wand" },
+
 		{ "type": "qualifier1", "hid": "admirable" },
 		{ "type": "qualifier1", "hid": "arcanic" },
 		{ "type": "qualifier1", "hid": "bestial" },
@@ -71,6 +72,7 @@
 		{ "type": "qualifier1", "hid": "used" },
 		{ "type": "qualifier1", "hid": "whirling" },
 		{ "type": "qualifier1", "hid": "wooden" },
+
 		{ "type": "qualifier2", "hid": "adjudicator" },
 		{ "type": "qualifier2", "hid": "ambassador" },
 		{ "type": "qualifier2", "hid": "ancients" },
@@ -116,12 +118,6 @@
 		{ "type": "qualifier2", "hid": "warfield" },
 		{ "type": "qualifier2", "hid": "warrior" },
 		{ "type": "qualifier2", "hid": "wise" },
-		{ "type": "qualifier2", "hid": "woodsman" },
-		{ "type": "quality", "hid": "common" },
-		{ "type": "quality", "hid": "uncommon" },
-		{ "type": "quality", "hid": "rare" },
-		{ "type": "quality", "hid": "epic" },
-		{ "type": "quality", "hid": "legendary" },
-		{ "type": "quality", "hid": "artifact" }
+		{ "type": "qualifier2", "hid": "woodsman" }
 	]
 }
